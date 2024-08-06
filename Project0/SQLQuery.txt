@@ -1,0 +1,35 @@
+-- Database name = project0
+-- Schema name   = public
+
+CREATE TABLE IF NOT EXISTS accounts (
+	account_id SERIAL PRIMARY KEY,
+	password VARCHAR(20) not null,
+	name VARCHAR(50) unique not null,
+	is_admin BOOLEAN DEFAULT false
+);
+
+CREATE TABLE IF NOT EXISTS groceries (
+	item_id SERIAL PRIMARY KEY,
+	name VARCHAR(50) NOT NULL,
+	category VARCHAR(50),
+	price DECIMAL(20,2) NOT NULL CHECK (price >= 0),
+	quantity INT NOT NULL CHECK (quantity > 0),
+	owner_id INT NOT NULL,
+	CONSTRAINT fk_owner
+      		FOREIGN KEY(owner_id)
+        		REFERENCES accounts(account_id)
+);
+
+-- Test values
+
+INSERT INTO accounts (name, password, is_admin)
+VALUES
+	('Admin', 'coolAdmin27', true),
+	('Bob', 'Bob123', false),
+	('ProShopper97', 'password', false),
+	('Sally', 'banana' , false);
+
+INSERT INTO groceries (owner_id, name, category, price, quantity)
+VALUES
+	(1, 'Apple', 'Fruits', 0.99, 1),
+	(2, 'Banana', 'Fruits', 1.50, 4);
